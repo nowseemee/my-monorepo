@@ -27,6 +27,13 @@ export default [
                     loader: () => import('./pages/YouTube.js'),
                 }),
             },
+            {
+                path: (parentRoute) => `${parentRoute}my-media`,
+                exact: true,
+                component: generateAsyncRouteComponent({
+                    loader: () => import('./pages/MyMedia.js'),
+                }),
+            },
         ],
     },
 ];
