@@ -1,36 +1,65 @@
 import React from 'react';
+import ReactPlayer from 'react-player';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
+import { Consumer } from '../store.js';
+
 const firestore = firebase.firestore();
+
 firestore.settings({ timestampsInSnapshots: true });
 firestore.enablePersistence();
 
-export default class MyMedia extends React.Component {
+class MyMedia extends React.Component {
     state = {
         items: [],
     };
 
     componentDidMount() {
         firestore
-            .collection('users/hYf8jBANrZa5Iqx3zhBssQwK36t2/videos')
+            .collection(`users/${this.props.userId}/videos`)
             .orderBy('timestamp')
             .onSnapshot((querySnapshot) => {
                 const acc = [];
-
                 querySnapshot.forEach((doc) => acc.push(doc.data()));
                 this.setState({ items: acc });
-            }, console.log);
+            });
     }
 
     render() {
         return (
             <div>
                 {this.state.items.map((item) => {
-                    console.log(item);
-                    return item.url;
+                    return (
+                        item.url && (
+                            <ReactPlayer
+                                key={item.url}
+                                url={item.url}
+                                controls
+                            />
+                        )
+                    );
                 })}
             </div>
         );
     }
 }
+
+export default (props) => {
+    return global.isServer ? (
+        <h1>loading</h1>
+    ) : (
+        <Consumer
+            mapStateToProps={({ userId }) => ({
+                userId,
+            })}
+        >
+            {({ userId }) => (
+                <MyMedia
+                    {...props}
+                    userId={userId || window.localStorage.getItem('userId')}
+                />
+            )}
+        </Consumer>
+    );
+};

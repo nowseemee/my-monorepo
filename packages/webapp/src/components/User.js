@@ -3,13 +3,14 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import { CLIENT_ID } from '../config';
 import Profile from './Profile';
+import { Consumer } from '../store.js';
 
 const DISCOVERY_DOCS = [
     'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest',
 ];
 const SCOPES = 'https://www.googleapis.com/auth/youtube.readonly';
 
-export default class User extends React.Component {
+class User extends React.Component {
     state = {
         isLoaded: false,
     };
@@ -28,25 +29,32 @@ export default class User extends React.Component {
 
             auth2.currentUser.listen((user) => {
                 this.setState({ isLoaded: true });
-                user.Zi &&
-                    firebase
-                        .auth()
-                        .signInAndRetrieveDataWithCredential(
-                            firebase.auth.GoogleAuthProvider.credential(
-                                user.Zi.id_token,
-                                user.Zi.access_token
-                            )
-                        );
+                !user.Zi
+                    ? this.props.actions.signOut()
+                    : firebase
+                          .auth()
+                          .signInAndRetrieveDataWithCredential(
+                              firebase.auth.GoogleAuthProvider.credential(
+                                  user.Zi.id_token,
+                                  user.Zi.access_token
+                              )
+                          )
+                          .then(({ user }) =>
+                              this.props.actions.signIn(user.uid)
+                          );
             });
         });
 
-    load() {
+    load = () => {
         const script = document.createElement('script');
         script.src = 'https://apis.google.com/js/platform.js';
-        script.id = 'gapi';
-        document.body.appendChild(script);
+        script.id = 'googlePlatform';
         script.onload = this.handleLoad;
-    }
+
+        document.getElementById('googlePlatform')
+            ? this.handleLoad()
+            : document.body.appendChild(script);
+    };
 
     getProfile() {
         return window.gapi.auth2
@@ -66,7 +74,7 @@ export default class User extends React.Component {
 
     render() {
         return !this.state.isLoaded ? (
-            <h1>loading</h1>
+            <h1>loading or offline</h1>
         ) : (
             <div>
                 {window.gapi.auth2.getAuthInstance().isSignedIn.get() ? (
@@ -81,3 +89,11 @@ export default class User extends React.Component {
         );
     }
 }
+
+export default (props) => (
+    <Consumer mapStateToProps={({ userId }) => ({ userId })}>
+        {({ actions, userId }) => (
+            <User {...props} actions={actions} userId={userId} />
+        )}
+    </Consumer>
+);

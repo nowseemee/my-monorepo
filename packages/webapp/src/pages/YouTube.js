@@ -1,5 +1,6 @@
 import React from 'react';
 import { CLIENT_ID } from '../config';
+import { Consumer } from '../store.js';
 
 // Array of API discovery doc URLs for APIs used by the quickstart
 const DISCOVERY_DOCS = [
@@ -10,7 +11,7 @@ const DISCOVERY_DOCS = [
 // separated them with spaces.
 const SCOPES = 'https://www.googleapis.com/auth/youtube.readonly';
 
-export default class YouTube extends React.Component {
+class YouTube extends React.Component {
     state = {
         playLists: {},
         playlistItems: [],
@@ -47,31 +48,33 @@ export default class YouTube extends React.Component {
         this.load();
     }
 
-    load() {
+    handleLoad = () =>
+        window.gapi.load('client,auth2', () => {
+            window.gapi.client
+                .init({
+                    discoveryDocs: DISCOVERY_DOCS,
+                    clientId: CLIENT_ID,
+                    scope: SCOPES,
+                })
+                .then(() =>
+                    this.fetchPlayLists()
+                        .then(this.fetchPlaylistItems)
+                        .then((playlistItems) =>
+                            this.setState({ playlistItems })
+                        )
+                );
+        });
+
+    load = () => {
         const script = document.createElement('script');
         script.src = 'https://apis.google.com/js/client.js';
-        script.onload = () => {
-            window.gapi.load('auth2', () =>
-                window.gapi.client
-                    .init({
-                        discoveryDocs: DISCOVERY_DOCS,
-                        clientId: CLIENT_ID,
-                        scope: SCOPES,
-                    })
-                    .then(() => {
-                        this.setState({ isGoogleClientReady: true });
+        script.id = 'googleClient';
+        script.onload = this.handleLoad;
 
-                        this.fetchPlayLists()
-                            .then(this.fetchPlaylistItems)
-                            .then((playlistItems) =>
-                                this.setState({ playlistItems })
-                            );
-                    })
-            );
-        };
-
-        document.body.appendChild(script);
-    }
+        document.getElementById('googleClient')
+            ? this.handleLoad()
+            : document.body.appendChild(script);
+    };
 
     render() {
         return (
@@ -92,7 +95,7 @@ export default class YouTube extends React.Component {
                                         fetch(
                                             `/yt?v=${
                                                 i.snippet.resourceId.videoId
-                                            }&u=${109721973576273678082}`
+                                            }&u=${this.props.userId}`
                                         )
                                     }
                                 >
@@ -106,3 +109,13 @@ export default class YouTube extends React.Component {
         );
     }
 }
+
+export default (props) => (
+    <Consumer
+        mapStateToProps={({ userId }) => ({
+            userId,
+        })}
+    >
+        {({ userId }) => userId && <YouTube {...props} userId={userId} />}
+    </Consumer>
+);
