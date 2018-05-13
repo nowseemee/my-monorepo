@@ -7,20 +7,6 @@ export default [
         path: () => `/`,
         routes: [
             {
-                path: (parentRoute) => `${parentRoute}dummy`,
-                exact: true,
-                component: generateAsyncRouteComponent({
-                    loader: () => import('./pages/Dummy'),
-                }),
-            },
-            {
-                path: (parentRoute) => `${parentRoute}buddy`,
-                exact: true,
-                component: generateAsyncRouteComponent({
-                    loader: () => import('./pages/Buddy'),
-                }),
-            },
-            {
                 path: (parentRoute) => `${parentRoute}youtube`,
                 exact: true,
                 component: generateAsyncRouteComponent({
