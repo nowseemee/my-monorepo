@@ -1,0 +1,33 @@
+{
+  "name": "webapp",
+  "version": "0.1.0",
+  "license": "MIT",
+  "dependencies": {
+    "prop-types": "^15.6.1",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-router": "^4.2.0",
+    "react-router-config": "^1.0.0-beta.4",
+    "react-router-dom": "^4.2.2"
+  },
+  "scripts": {
+    "start": "my-react-scripts start",
+    "test": "my-react-scripts test --env=jsdom",
+    "build:client": "my-react-scripts build-client",
+    "build:server": "my-react-scripts build-server",
+    "cp:asset-manifest": "cp build/asset-manifest.json server/",
+    "build": "yarn build:client && yarn build:server  && yarn cp:asset-manifest",
+    "deploy:functions": "firebase deploy --only functions",
+    "deploy:hosting": "firebase deploy --only hosting",
+    "deploy": "firebase deploy --only hosting,functions",
+    "golive": "yarn build && yarn deploy",
+    "serve": "firebase serve --only functions,hosting"
+  },
+  "devDependencies": {
+    "@firebase/app-types": "0.x",
+    "firebase": "^5.0.2",
+    "my-react-scripts": "file:../my-react-scripts",
+    "sw-precache": "^5.2.1",
+    "sw-toolbox": "^3.6.0"
+  }
+}

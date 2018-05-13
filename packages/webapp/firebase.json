@@ -1,0 +1,28 @@
+{
+    "hosting": {
+        "public": "build",
+        "rewrites": [
+            {
+                "source": "/yt",
+                "function": "yt"
+            },
+            {
+                "source": "**",
+                "function": "app"
+            }
+        ],
+        "headers": [
+            {
+                "source": "service-worker.js",
+                "headers": [{ "key": "Cache-Control", "value": "max-age=0" }]
+            },
+            {
+                "source": "sw.js",
+                "headers": [{ "key": "Cache-Control", "value": "max-age=0" }]
+            }
+        ]
+    },
+    "functions": {
+        "source": "server"
+    }
+}
