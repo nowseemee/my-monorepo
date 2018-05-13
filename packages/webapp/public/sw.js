@@ -1,4 +1,4 @@
-self.importScripts('sw-toolbox.map.js');
+self.importScripts('sw-toolbox.js');
 
 toolbox.router.get('/(.*)', toolbox.networkFirst, {
     // Use a dedicated cache for the responses, separate from the default cache.
