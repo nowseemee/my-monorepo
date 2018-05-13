@@ -5,7 +5,7 @@ import { renderRoutes } from 'react-router-config';
 
 import routes from './routes';
 import { convertCustomRouteConfig, ensureReady } from './rrv4Helpers';
-import Html from './Html';
+import Html from './components/Html';
 
 const routeConfig = convertCustomRouteConfig(routes);
 

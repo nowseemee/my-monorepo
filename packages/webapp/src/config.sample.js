@@ -6,3 +6,5 @@ export default {
     storageBucket: '',
     messagingSenderId: '',
 };
+
+export const CLIENT_ID = '';

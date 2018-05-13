@@ -1,4 +1,4 @@
-import App from './App';
+import App from './pages/App';
 import { generateAsyncRouteComponent } from './rrv4Helpers';
 
 export default [
@@ -7,26 +7,25 @@ export default [
         path: () => `/`,
         routes: [
             {
-                path: (parentRoute) => `${parentRoute}`,
+                path: (parentRoute) => `${parentRoute}dummy`,
+                exact: true,
                 component: generateAsyncRouteComponent({
-                    loader: () => import('./UserLayer'),
+                    loader: () => import('./pages/Dummy'),
                 }),
-                routes: [
-                    {
-                        path: (parentRoute) => `${parentRoute}dummy`,
-                        exact: true,
-                        component: generateAsyncRouteComponent({
-                            loader: () => import('./Dummy'),
-                        }),
-                    },
-                    {
-                        path: (parentRoute) => `${parentRoute}buddy`,
-                        exact: true,
-                        component: generateAsyncRouteComponent({
-                            loader: () => import('./Buddy'),
-                        }),
-                    },
-                ],
+            },
+            {
+                path: (parentRoute) => `${parentRoute}buddy`,
+                exact: true,
+                component: generateAsyncRouteComponent({
+                    loader: () => import('./pages/Buddy'),
+                }),
+            },
+            {
+                path: (parentRoute) => `${parentRoute}youtube`,
+                exact: true,
+                component: generateAsyncRouteComponent({
+                    loader: () => import('./pages/YouTube.js'),
+                }),
             },
         ],
     },
