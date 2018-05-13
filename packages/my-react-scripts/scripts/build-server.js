@@ -36,6 +36,7 @@ webpack(
                                 ],
                             ],
                             plugins: [
+                                'babel-plugin-transform-object-rest-spread',
                                 'dynamic-import-node',
                                 'babel-plugin-transform-class-properties',
                             ],
