@@ -51,7 +51,7 @@ export default class YouTube extends React.Component {
         const script = document.createElement('script');
         script.src = 'https://apis.google.com/js/client.js';
         script.onload = () => {
-            window.gapi.load('client:auth2', () =>
+            window.gapi.load('auth2', () =>
                 window.gapi.client
                     .init({
                         discoveryDocs: DISCOVERY_DOCS,
@@ -79,10 +79,25 @@ export default class YouTube extends React.Component {
                 <ul>
                     {this.state.playlistItems.map((i) => (
                         <li key={i.snippet.resourceId.videoId}>
-                            <img src={i.snippet.thumbnails.high.url} alt="" />
+                            {i.snippet.thumbnails && (
+                                <img
+                                    src={i.snippet.thumbnails.high.url}
+                                    alt=""
+                                />
+                            )}
                             <div>
                                 {i.snippet.title} -{' '}
-                                {i.snippet.resourceId.videoId}
+                                <button
+                                    onClick={() =>
+                                        fetch(
+                                            `/yt?v=${
+                                                i.snippet.resourceId.videoId
+                                            }&u=${109721973576273678082}`
+                                        )
+                                    }
+                                >
+                                    {i.snippet.resourceId.videoId}
+                                </button>
                             </div>
                         </li>
                     ))}
