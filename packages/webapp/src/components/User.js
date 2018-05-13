@@ -28,7 +28,6 @@ export default class User extends React.Component {
 
             auth2.currentUser.listen((user) => {
                 this.setState({ isLoaded: true });
-
                 user.Zi &&
                     firebase
                         .auth()
@@ -58,6 +57,7 @@ export default class User extends React.Component {
 
     signOut() {
         window.gapi.auth2.getAuthInstance().signOut();
+        firebase.auth().signOut();
     }
 
     signIn() {
