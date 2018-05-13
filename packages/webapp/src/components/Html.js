@@ -18,7 +18,7 @@ const Html = ({ children, assets }) => (
             <link rel="manifest" href="manifest.json" />
             <link rel="shortcut icon" href="favicon.ico" />
 
-            <title>React App</title>
+            <title>Sound Garden</title>
         </head>
         <body>
             <div id="root">{children}</div>
