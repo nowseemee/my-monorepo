@@ -13,44 +13,67 @@ const firestore = new Firestore({
     projectId: config.projectId,
 });
 
-const handleUpload = (request, response, uploadData, fileName) => {
+const handleUpload = (request, response, uploadData, info) => {
     bucket
         .upload(uploadData.file)
         .then(() =>
             storage
                 .bucket(bucket.name)
-                .file(fileName)
+                .file(uploadData.fileName)
                 .makePublic()
         )
         .then(() => {
-            const data = {
+            const data = Object.assign({}, uploadData, {
                 url:
                     'https://storage.googleapis.com/' +
                     bucket.name +
                     '/' +
-                    fileName,
-                userId: 'Hello World',
-                bucketName: bucket.name,
-                fileName,
-            };
+                    uploadData.fileName,
+                title: info.title,
+                thumbnail: info.thumbnail_url,
+            });
 
-            firestore.doc('videos/' + request.query.v).set(data);
+            firestore
+                .doc(
+                    'users/' +
+                        uploadData.userId +
+                        '/videos/' +
+                        uploadData.videoId
+                )
+                .set(data);
 
             return data;
         })
         .then((data) => response.status(200).json(data))
-        .catch((error) => response.status(500).json(error));
+        .catch((error) => {
+            console.log(error);
+            response.status(500).json(error);
+        });
 };
 
 module.exports = (request, response) => {
-    const fileName = request.query.v + '.mp4';
+    const videoId = request.query.v;
+    const fileName = videoId + '.mp4';
+    const userId = request.query.u;
     const filepath = path.join(os.tmpdir(), fileName);
-    const uploadData = { file: filepath, type: 'video/mp4' };
+    const uploadData = {
+        fileName,
+        userId,
+        videoId,
+        file: filepath,
+        bucketName: bucket.name,
+        timestamp: new Date().getTime(),
+    };
     const video = ytdl('http://www.youtube.com/watch?v=' + request.query.v);
 
     video.pipe(fs.createWriteStream(filepath));
+
+    let info;
+    video.on('info', (i) => {
+        info = i;
+    });
     video.on('progress', (chunkLength, downloaded, total) => {
         downloaded === total &&
-            handleUpload(request, response, uploadData, fileName);
+            handleUpload(request, response, uploadData, info);
     });
 };
