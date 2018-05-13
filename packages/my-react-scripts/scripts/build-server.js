@@ -48,8 +48,7 @@ webpack(
     },
     (err, stats) => {
         if (err || stats.hasErrors()) {
-            throw new Error(err);
+            throw new Error(stats.compilation.errors);
         }
-        // Done processing
     }
 );
