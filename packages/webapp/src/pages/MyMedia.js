@@ -46,6 +46,7 @@ class MyMedia extends React.Component {
                                         },
                                     }}
                                     height={'28px'}
+                                    width={'80vw'}
                                 />
                             </li>
                         )
