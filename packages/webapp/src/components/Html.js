@@ -16,7 +16,12 @@ const Html = ({ children, assets }) => (
             />
 
             <link rel="manifest" href="manifest.json" />
-            <link rel="shortcut icon" href="favicon.ico" />
+            <link rel="shortcut icon" href="Icon-192.png" />
+            <link
+                rel="apple-touch-icon-precomposed"
+                href="Icon-196.png"
+                sizes="196x196"
+            />
 
             <title>Sound Garden</title>
         </head>
