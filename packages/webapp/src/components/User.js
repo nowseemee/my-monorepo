@@ -3,7 +3,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import { CLIENT_ID } from '../config';
 import Profile from './Profile';
-import { Consumer } from '../store.js';
+import { connect } from '../store';
 
 const DISCOVERY_DOCS = [
     'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest',
@@ -39,9 +39,14 @@ class User extends React.Component {
                                   user.Zi.access_token
                               )
                           )
-                          .then(({ user }) =>
-                              this.props.actions.signIn(user.uid)
-                          );
+                          .then(({ user }) => {
+                              this.props.actions.signIn(user.uid);
+                              typeof window !== 'undefined' &&
+                                  window.localStorage.setItem(
+                                      'userId',
+                                      user.uid
+                                  );
+                          });
             });
         });
 
@@ -66,6 +71,7 @@ class User extends React.Component {
     signOut() {
         window.gapi.auth2.getAuthInstance().signOut();
         firebase.auth().signOut();
+        window.localStorage.removeItem('userId');
     }
 
     signIn() {
@@ -76,12 +82,14 @@ class User extends React.Component {
         return !this.state.isLoaded ? (
             <h1>loading or offline</h1>
         ) : (
-            <div>
+            <div style={{ display: 'inline-flex' }}>
                 {window.gapi.auth2.getAuthInstance().isSignedIn.get() ? (
-                    <div>
-                        <Profile profile={this.getProfile()} />
-                        <button onClick={() => this.signOut()}>logout</button>
-                    </div>
+                    [
+                        <button key={0} onClick={() => this.signOut()}>
+                            logout
+                        </button>,
+                        <Profile key={1} profile={this.getProfile()} />,
+                    ]
                 ) : (
                     <button onClick={() => this.signIn()}>login</button>
                 )}
@@ -90,10 +98,6 @@ class User extends React.Component {
     }
 }
 
-export default (props) => (
-    <Consumer mapStateToProps={({ userId }) => ({ userId })}>
-        {({ actions, userId }) => (
-            <User {...props} actions={actions} userId={userId} />
-        )}
-    </Consumer>
-);
+export default connect(({ userId }) => ({
+    userId,
+}))(User);

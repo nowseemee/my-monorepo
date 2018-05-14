@@ -1,6 +1,8 @@
 import React from 'react';
+import { find, propEq, pathOr } from 'ramda';
 import { CLIENT_ID } from '../config';
-import { Consumer } from '../store.js';
+import { connect } from '../store';
+import List from '../components/List';
 
 // Array of API discovery doc URLs for APIs used by the quickstart
 const DISCOVERY_DOCS = [
@@ -13,21 +15,21 @@ const SCOPES = 'https://www.googleapis.com/auth/youtube.readonly';
 
 class YouTube extends React.Component {
     state = {
-        playLists: {},
-        playlistItems: [],
+        youTubePlayLists: {},
+        youTubeItems: [],
     };
 
-    fetchPlaylistItems = (playlistId) => {
+    fetchYouTubeItems = (playlistId) => {
         return window.gapi.client.youtube.playlistItems
             .list({
                 playlistId,
                 part: 'snippet',
-                maxResults: 10,
+                maxResults: 50,
             })
             .then((response) => response.result.items);
     };
 
-    fetchPlayLists = () =>
+    fetchYouTubePlayLists = () =>
         window.gapi.client.youtube.channels
             .list({
                 part: 'contentDetails',
@@ -35,7 +37,7 @@ class YouTube extends React.Component {
             })
             .then((response) => {
                 this.setState({
-                    playLists:
+                    youTubePlayLists:
                         response.result.items[0].contentDetails
                             .relatedPlaylists,
                 });
@@ -57,11 +59,9 @@ class YouTube extends React.Component {
                     scope: SCOPES,
                 })
                 .then(() =>
-                    this.fetchPlayLists()
-                        .then(this.fetchPlaylistItems)
-                        .then((playlistItems) =>
-                            this.setState({ playlistItems })
-                        )
+                    this.fetchYouTubePlayLists()
+                        .then(this.fetchYouTubeItems)
+                        .then((youTubeItems) => this.setState({ youTubeItems }))
                 );
         });
 
@@ -79,43 +79,36 @@ class YouTube extends React.Component {
     render() {
         return (
             <div>
-                <ul>
-                    {this.state.playlistItems.map((i) => (
-                        <li key={i.snippet.resourceId.videoId}>
-                            {i.snippet.thumbnails && (
-                                <img
-                                    src={i.snippet.thumbnails.high.url}
-                                    alt=""
-                                />
-                            )}
-                            <div>
-                                {i.snippet.title} -{' '}
-                                <button
-                                    onClick={() =>
-                                        fetch(
-                                            `/yt?v=${
-                                                i.snippet.resourceId.videoId
-                                            }&u=${this.props.userId}`
-                                        )
-                                    }
-                                >
-                                    {i.snippet.resourceId.videoId}
-                                </button>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+                <List
+                    getThumbnail={pathOr('', [
+                        'snippet',
+                        'thumbnails',
+                        'high',
+                        'url',
+                    ])}
+                    getTitle={(item) => item.snippet.title}
+                    items={this.state.youTubeItems}
+                    onClick={(index) =>
+                        fetch(
+                            `/yt?v=${
+                                this.state.youTubeItems[index].snippet
+                                    .resourceId.videoId
+                            }&u=${this.props.userId}`
+                        )
+                    }
+                    getId={(item) => item.snippet.resourceId.videoId}
+                    getIsDisabled={(item) =>
+                        find(
+                            propEq('videoId', item.snippet.resourceId.videoId)
+                        )(this.props.playListItems)
+                    }
+                />
             </div>
         );
     }
 }
 
-export default (props) => (
-    <Consumer
-        mapStateToProps={({ userId }) => ({
-            userId,
-        })}
-    >
-        {({ userId }) => userId && <YouTube {...props} userId={userId} />}
-    </Consumer>
-);
+export default connect(({ userId, playListItems }) => ({
+    userId,
+    playListItems,
+}))(YouTube);

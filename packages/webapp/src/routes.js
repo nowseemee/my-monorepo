@@ -1,4 +1,4 @@
-import App from './pages/App';
+import App from './components/App';
 import { generateAsyncRouteComponent } from './rrv4Helpers';
 
 export default [
