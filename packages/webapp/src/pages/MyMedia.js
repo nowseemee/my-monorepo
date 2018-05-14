@@ -1,5 +1,6 @@
 import React from 'react';
-import ReactPlayer from 'react-player';
+import FilePlayer from 'react-player/lib/players/FilePlayer';
+
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
@@ -28,19 +29,29 @@ class MyMedia extends React.Component {
 
     render() {
         return (
-            <div>
+            <ul>
                 {this.state.items.map((item) => {
                     return (
                         item.url && (
-                            <ReactPlayer
-                                key={item.url}
-                                url={item.url}
-                                controls
-                            />
+                            <li key={item.url}>
+                                <h3>{item.title}</h3>
+                                <img src={item.thumbnail} alt={item.title} />
+
+                                <FilePlayer
+                                    url={item.url}
+                                    controls
+                                    config={{
+                                        file: {
+                                            forceAudio: true,
+                                        },
+                                    }}
+                                    height={'28px'}
+                                />
+                            </li>
                         )
                     );
                 })}
-            </div>
+            </ul>
         );
     }
 }

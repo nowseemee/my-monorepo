@@ -60,7 +60,10 @@ module.exports = (request, response) => {
         timestamp: new Date().getTime(),
         url: 'https://storage.googleapis.com/' + bucket.name + '/' + fileName,
     };
-    const video = ytdl('http://www.youtube.com/watch?v=' + request.query.v);
+    const video = ytdl('http://www.youtube.com/watch?v=' + request.query.v, {
+        quality: 'highestaudio',
+        filter: 'audioonly',
+    });
 
     video.pipe(fs.createWriteStream(filepath));
 
