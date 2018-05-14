@@ -62,7 +62,6 @@ module.exports = (request, response) => {
     };
     const video = ytdl('http://www.youtube.com/watch?v=' + request.query.v, {
         quality: 'highestaudio',
-        filter: 'audioonly',
     });
 
     video.pipe(fs.createWriteStream(filepath));
