@@ -58,11 +58,9 @@ class YouTube extends React.Component {
                     clientId: CLIENT_ID,
                     scope: SCOPES,
                 })
-                .then(() =>
-                    this.fetchYouTubePlayLists()
-                        .then(this.fetchYouTubeItems)
-                        .then((youTubeItems) => this.setState({ youTubeItems }))
-                );
+                .then(this.fetchYouTubePlayLists)
+                .then(this.fetchYouTubeItems)
+                .then((youTubeItems) => this.setState({ youTubeItems }));
         });
 
     load = () => {
