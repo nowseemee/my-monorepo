@@ -2,7 +2,13 @@ import { initStore } from 'react-waterfall';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
-import { initialState, setPlayListItems, playById, playNext } from './utils';
+import {
+    initialState,
+    setPlayListItems,
+    playById,
+    playNext,
+    playPrevious,
+} from './utils';
 import config from '../config';
 
 firebase.initializeApp(config);
@@ -18,6 +24,7 @@ const store = {
         setPlayListItems,
         playById,
         playNext,
+        playPrevious,
     },
 };
 

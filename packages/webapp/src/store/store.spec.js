@@ -4,6 +4,7 @@ import {
     playById,
     getPlaying,
     playNext,
+    playPrevious,
 } from './utils';
 
 describe('store', () => {
@@ -77,6 +78,37 @@ describe('store', () => {
         expect(playNext(madeUpState)).toEqual({
             ...madeUpState,
             playId: 'foo',
+        });
+    });
+
+    test('playPrevious', () => {
+        const madeUpState = {
+            ...initialState,
+            playListItems: [
+                { videoId: 'foo' },
+                { videoId: 'bar' },
+                { videoId: 'baz' },
+            ],
+            playId: 'bar',
+        };
+        expect(playPrevious(madeUpState)).toEqual({
+            ...madeUpState,
+            playId: 'foo',
+        });
+    });
+    test('playPrevious starts over after first item', () => {
+        const madeUpState = {
+            ...initialState,
+            playListItems: [
+                { videoId: 'foo' },
+                { videoId: 'bar' },
+                { videoId: 'baz' },
+            ],
+            playId: 'foo',
+        };
+        expect(playPrevious(madeUpState)).toEqual({
+            ...madeUpState,
+            playId: 'baz',
         });
     });
 });

@@ -12,6 +12,7 @@ import {
     when,
     always,
     isNil,
+    dec,
 } from 'ramda';
 
 export const initialState = {
@@ -43,14 +44,17 @@ export const getPlaying = (store) =>
 const getFirstVideoId = (store) =>
     compose(prop('videoId'), head, getPlayListItems)(store);
 
-export const playNext = (store) =>
+const makeStep = (direction) => (store) =>
     compose(
         (playId = getFirstVideoId(store)) => merge(store, { playId }),
         prop('videoId'),
         nth(__, getPlayListItems(store)),
-        inc,
+        direction,
         (videoId) =>
             findIndex(matchByVideoId(videoId))(getPlayListItems(store)),
         prop('videoId'),
         getPlaying
     )(store);
+
+export const playNext = makeStep(inc);
+export const playPrevious = makeStep(dec);
