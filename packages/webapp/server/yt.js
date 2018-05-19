@@ -42,7 +42,7 @@ const handleUpload = (request, response, uploadData, info) => {
         .then((data) => response.status(200).json(data))
         .catch((error) => {
             console.log(error);
-            response.status(500).json(error);
+            response.status(500);
         });
 };
 
