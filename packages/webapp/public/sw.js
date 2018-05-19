@@ -5,7 +5,7 @@ toolbox.router.get('/(.*)', toolbox.cacheFirst, {
     cache: {
         name: 'storage',
         // Store up to 10 entries in that cache.
-        maxEntries: 10,
+        // maxEntries: 10,
         // Expire any entries that are older than 30 seconds.
     },
 
