@@ -66,7 +66,10 @@ class User extends React.Component {
                     user.Zi.access_token
                 )
             )
-            .then(({ user }) => initFirestore(user.uid));
+            .then(({ user }) => {
+                initFirestore(user.uid);
+                window.localStorage.setItem('userId', user.uid);
+            });
     }
 
     signIn() {

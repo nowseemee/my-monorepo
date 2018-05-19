@@ -91,7 +91,7 @@ class YouTube extends React.Component {
                             `/yt?v=${
                                 this.state.youTubeItems[index].snippet
                                     .resourceId.videoId
-                            }&u=${this.props.userId}`
+                            }&u=${window.localStorage.getItem('userId')}`
                         )
                     }
                     getId={(item) => item.snippet.resourceId.videoId}
@@ -106,7 +106,6 @@ class YouTube extends React.Component {
     }
 }
 
-export default connect(({ userId, playListItems }) => ({
-    userId,
+export default connect(({ playListItems }) => ({
     playListItems,
 }))(YouTube);
