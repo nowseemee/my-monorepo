@@ -3,7 +3,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import { CLIENT_ID } from '../config';
 import Profile from './Profile';
-import { connect } from '../store';
+import { connect, initFirestore } from '../store';
 
 const DISCOVERY_DOCS = [
     'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest',
@@ -29,24 +29,7 @@ class User extends React.Component {
 
             auth2.currentUser.listen((user) => {
                 this.setState({ isLoaded: true });
-                !user.Zi
-                    ? this.props.actions.signOut()
-                    : firebase
-                          .auth()
-                          .signInAndRetrieveDataWithCredential(
-                              firebase.auth.GoogleAuthProvider.credential(
-                                  user.Zi.id_token,
-                                  user.Zi.access_token
-                              )
-                          )
-                          .then(({ user }) => {
-                              this.props.actions.signIn(user.uid);
-                              typeof window !== 'undefined' &&
-                                  window.localStorage.setItem(
-                                      'userId',
-                                      user.uid
-                                  );
-                          });
+                !user.Zi ? this.handleSignOut() : this.handleSignIn(user);
             });
         });
 
@@ -68,10 +51,22 @@ class User extends React.Component {
             .getBasicProfile();
     }
 
-    signOut() {
+    handleSignOut() {
         window.gapi.auth2.getAuthInstance().signOut();
         firebase.auth().signOut();
         window.localStorage.removeItem('userId');
+    }
+
+    handleSignIn(user) {
+        firebase
+            .auth()
+            .signInAndRetrieveDataWithCredential(
+                firebase.auth.GoogleAuthProvider.credential(
+                    user.Zi.id_token,
+                    user.Zi.access_token
+                )
+            )
+            .then(({ user }) => initFirestore(user.uid));
     }
 
     signIn() {
@@ -85,7 +80,7 @@ class User extends React.Component {
             <div style={{ display: 'inline-flex' }}>
                 {window.gapi.auth2.getAuthInstance().isSignedIn.get() ? (
                     [
-                        <button key={0} onClick={() => this.signOut()}>
+                        <button key={0} onClick={() => this.handleSignOut()}>
                             logout
                         </button>,
                         <Profile key={1} profile={this.getProfile()} />,
