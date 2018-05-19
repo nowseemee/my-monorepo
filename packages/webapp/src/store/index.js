@@ -2,38 +2,22 @@ import { initStore } from 'react-waterfall';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
-import config from './config';
+import { initialState, setPlayListItems, playById, playNext } from './utils';
+import config from '../config';
 
 firebase.initializeApp(config);
 
 const firestore = firebase.firestore();
-
 typeof window !== 'undefined' &&
     firestore.settings({ timestampsInSnapshots: true });
 typeof window !== 'undefined' && firestore.enablePersistence();
 
 const store = {
-    initialState: {
-        userId: null,
-        playIndex: 0,
-        playListItems: [],
-        isPlaying: false,
-    },
+    initialState,
     actions: {
-        signIn: (store, userId) => ({
-            ...store,
-            userId,
-        }),
-        signOut: (store) => ({ ...store, userId: null }),
-        setPlayListItems: (store, playListItems) => ({
-            ...store,
-            playListItems,
-        }),
-        setPlayIndex: (store, playIndex) => ({
-            ...store,
-            playIndex,
-            isPlaying: true,
-        }),
+        setPlayListItems,
+        playById,
+        playNext,
     },
 };
 
@@ -41,12 +25,13 @@ export const { Provider, Consumer, connect, subscribe, actions } = initStore(
     store
 );
 
-typeof window !== 'undefined' &&
+export const initFirestore = (userId) => {
     firestore
-        .collection(`users/${window.localStorage.getItem('userId')}/videos`)
+        .collection(`users/${userId}/videos`)
         .orderBy('timestamp', 'desc')
         .onSnapshot((querySnapshot) => {
             const acc = [];
             querySnapshot.forEach((doc) => acc.push(doc.data()));
             actions.setPlayListItems(acc);
         });
+};

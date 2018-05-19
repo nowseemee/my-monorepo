@@ -1,13 +1,12 @@
 import React from 'react';
 import { connect } from '../store';
+import { getPlaying } from '../store/utils';
 
-export default connect((store) => {
-    return {
-        track: store.playListItems[store.playIndex] || {},
-    };
-})(({ track }) => (
+const TrackInfo = (track) => (
     <div>
         <img src={track.thumbnail} alt={track.title} />
         {track.title}
     </div>
-));
+);
+
+export default connect(getPlaying)(TrackInfo);

@@ -1,11 +1,12 @@
 import FilePlayer from 'react-player/lib/players/FilePlayer';
 import { connect, actions } from '../store';
+import { getPlaying } from '../store/utils';
 
 export default connect((store) => {
+    const track = getPlaying(store);
     return {
         playing: store.isPlaying,
-        index: store.playIndex,
-        url: (store.playListItems[store.playIndex] || {}).url,
+        url: track.url,
         controls: true,
         config: {
             file: {
@@ -14,6 +15,6 @@ export default connect((store) => {
         },
         height: '28px',
         width: '100%',
-        onEnded: () => actions.setPlayIndex(store.playIndex + 1),
+        onEnded: () => actions.playNext(),
     };
 })(FilePlayer);

@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`store getPlaying snapshot 1`] = `
+Object {
+  "videoId": "bar",
+}
+`;
+
+exports[`store initialState 1`] = `
+Object {
+  "isPlaying": false,
+  "playId": "",
+  "playListItems": Array [],
+}
+`;
+
+exports[`store playById 1`] = `
+Object {
+  "isPlaying": true,
+  "playId": "videoId",
+  "playListItems": Array [],
+}
+`;
+
+exports[`store setPlayListItems 1`] = `
+Object {
+  "isPlaying": false,
+  "playId": "",
+  "playListItems": Array [
+    Object {
+      "title": "Here we go",
+    },
+  ],
+}
+`;

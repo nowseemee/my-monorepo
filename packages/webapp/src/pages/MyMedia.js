@@ -1,11 +1,11 @@
 import React from 'react';
 import List from '../components/List';
-import { connect } from '../store.js';
+import { connect } from '../store';
 
 const MyMedia = (props) => (
     <List
         onClick={(index) => {
-            props.actions.setPlayIndex(index);
+            props.actions.playById(props.playListItems[index].videoId);
         }}
         items={props.playListItems}
         getThumbnail={(item) => item.thumbnail}
