@@ -13,7 +13,7 @@ export const TrackInfo = (props) => (
             className={css`
                 position: absolute;
                 color: white;
-                padding: 14px 0 14px;
+                padding: 14px 8px;
                 background: black;
                 width: 100%;
                 background: linear-gradient(
