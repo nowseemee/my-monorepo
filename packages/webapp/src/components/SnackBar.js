@@ -7,13 +7,12 @@ import { connect, actions } from '../store';
 const styles = {
     container: (isVisible) => css`
         max-width: 568px;
-        width: auto;
         position: fixed;
         left: 50%;
+        overflow: hidden;
         display: flex;
         bottom: 0px;
-        z-index: 2900;
-        visibility: visible;
+        z-index: 1;
         transform: translate(-50%, ${isVisible ? '0' : '48px'});
         transition: transform 400ms cubic-bezier(0.23, 1, 0.32, 1) 0ms,
             visibility 400ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;

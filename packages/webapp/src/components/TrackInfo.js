@@ -11,7 +11,7 @@ export const TrackInfo = (props) => (
     >
         <span
             className={css`
-                position: absolute;
+                position: fixed;
                 color: white;
                 padding: 14px 8px;
                 background: black;
