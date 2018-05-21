@@ -19,6 +19,7 @@ export const initialState = {
     playId: '',
     playListItems: [],
     isPlaying: false,
+    toast: {},
 };
 export const setPlayListItems = (store, playListItems) => ({
     ...store,

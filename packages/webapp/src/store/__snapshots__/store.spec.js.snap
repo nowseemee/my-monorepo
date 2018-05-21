@@ -11,6 +11,7 @@ Object {
   "isPlaying": false,
   "playId": "",
   "playListItems": Array [],
+  "toast": Object {},
 }
 `;
 
@@ -19,6 +20,7 @@ Object {
   "isPlaying": true,
   "playId": "videoId",
   "playListItems": Array [],
+  "toast": Object {},
 }
 `;
 
@@ -31,5 +33,6 @@ Object {
       "title": "Here we go",
     },
   ],
+  "toast": Object {},
 }
 `;

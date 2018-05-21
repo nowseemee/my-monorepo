@@ -25,6 +25,7 @@ const store = {
         playById,
         playNext,
         playPrevious,
+        setToast: (store, toast = {}) => ({ ...store, toast }),
     },
 };
 

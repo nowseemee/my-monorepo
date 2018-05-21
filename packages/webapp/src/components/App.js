@@ -6,6 +6,8 @@ import Player from '../components/Player';
 import TrackInfo from '../components/TrackInfo';
 import Head from '../components/Head';
 import MediaSession from '../components/MediaSession';
+import SnackBar from '../components/SnackBar';
+import ServiceWorker from '../components/ServiceWorker';
 
 import { Provider } from '../store';
 import { css } from 'emotion';
@@ -42,6 +44,7 @@ class App extends Component {
     render() {
         return (
             <Provider>
+                <ServiceWorker />
                 <MediaSession />
                 <Head />
                 <style
@@ -64,6 +67,8 @@ class App extends Component {
                         {renderRoutes(this.props.route.routes)}
                     </div>
                 </div>
+
+                <SnackBar />
             </Provider>
         );
     }
