@@ -6,6 +6,7 @@ import { css } from 'emotion';
 import Profile from './Profile';
 import { connect, initFirestore } from '../store';
 import Button from './Button';
+import unicorn from '../unicorn.png';
 
 const DISCOVERY_DOCS = [
     'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest',
@@ -21,12 +22,17 @@ const User = (props) =>
               </Button>,
           ]
         : [
-              <div
+              <img
+                  key={2}
+                  src={unicorn}
+                  alt={'logged out profile placeholder'}
                   className={css`
                       height: 104px;
                   `}
               />,
-              <Button onClick={props.onSignIn}>login</Button>,
+              <Button key={3} onClick={props.onSignIn}>
+                  login
+              </Button>,
           ];
 
 class UserContainer extends React.Component {
@@ -96,7 +102,15 @@ class UserContainer extends React.Component {
     }
 
     render() {
-        return !this.state.isLoaded ? null : (
+        return !this.state.isLoaded ? (
+            <img
+                src={unicorn}
+                alt={'loading profile placeholder'}
+                className={css`
+                    height: 104px;
+                `}
+            />
+        ) : (
             <User
                 onSignOut={this.handleSignOut}
                 onSignIn={this.signIn}

@@ -21,6 +21,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "6.24.1",
     "cross-spawn": "^6.0.5",
+    "file-loader": "^1.1.11",
     "react-scripts": "^1.1.4",
     "webpack": "^4.8.2",
     "yargs": "^11.0.0"
