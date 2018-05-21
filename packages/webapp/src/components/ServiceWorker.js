@@ -36,12 +36,23 @@ export default class ServiceWorker extends Component {
 
     handleCache = (data) => {
         actions.setToast({ body: 'Cached happily', url: data.url });
+        actions.setPlayListItemPropertiesByUrl({
+            url: data.url,
+            property: { isCached: true, isLoading: false },
+        });
     };
     handleUnCache = (data) => {
         actions.setToast({ body: 'UnCached happily', url: data.url });
+        actions.setPlayListItemPropertiesByUrl({
+            url: data.url,
+            property: { isCached: false, isLoading: false },
+        });
     };
     handleMatch = (data) => {
-        actions.setCachedStateByUrl({ url: data.url, isCached: data.hit });
+        actions.setPlayListItemPropertiesByUrl({
+            url: data.url,
+            property: { isCached: data.hit },
+        });
     };
 
     render() {

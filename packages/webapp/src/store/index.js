@@ -8,7 +8,7 @@ import {
     playById,
     playNext,
     playPrevious,
-    setCachedStateByUrl,
+    setPlayListItemPropertiesByUrl,
 } from './utils';
 
 import config from '../config';
@@ -28,7 +28,7 @@ const store = {
         playNext,
         playPrevious,
         setToast: (store, toast = {}) => ({ ...store, toast }),
-        setCachedStateByUrl,
+        setPlayListItemPropertiesByUrl,
     },
 };
 

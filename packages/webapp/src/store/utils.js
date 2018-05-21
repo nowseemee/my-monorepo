@@ -70,9 +70,9 @@ const makeStep = (direction) => (store) =>
 export const playNext = makeStep(inc);
 export const playPrevious = makeStep(dec);
 
-export const setCachedStateByUrl = (store, { url, isCached }) =>
+export const setPlayListItemPropertiesByUrl = (store, { url, property }) =>
     compose(
         (playListItems) => ({ ...store, playListItems }),
-        map(when(propEq('url', url), merge(__, { isCached }))),
+        map(when(propEq('url', url), merge(__, property))),
         getPlayListItems
     )(store);

@@ -5,7 +5,7 @@ import {
     getPlaying,
     playNext,
     playPrevious,
-    setCachedStateByUrl,
+    setPlayListItemPropertiesByUrl,
 } from './utils';
 
 describe('store', () => {
@@ -14,7 +14,9 @@ describe('store', () => {
     });
     test('setPlayListItems', () => {
         expect(
-            setPlayListItems(initialState, [{ title: 'Here we go', url: 'baz' }])
+            setPlayListItems(initialState, [
+                { title: 'Here we go', url: 'baz' },
+            ])
         ).toMatchSnapshot();
     });
     test('playById', () => {
@@ -113,7 +115,7 @@ describe('store', () => {
         });
     });
 
-    test('setCachedStateByUrl', () => {
+    test('setPlayListItemPropertiesByUrl', () => {
         const url = 'foo';
         const madeUpInitialState = {
             ...initialState,
@@ -132,7 +134,10 @@ describe('store', () => {
         };
 
         expect(
-            setCachedStateByUrl(madeUpInitialState, { url, isCached: true })
+            setPlayListItemPropertiesByUrl(madeUpInitialState, {
+                url,
+                property: { isCached: true },
+            })
         ).toEqual(expectedState);
     });
 });

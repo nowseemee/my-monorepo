@@ -2,6 +2,7 @@ import React from 'react';
 import { css } from 'emotion';
 import { TrackInfo } from './TrackInfo';
 import Button from './Button';
+import Spinner from './Spinner';
 
 export default (props) => (
     <div
@@ -33,13 +34,13 @@ export default (props) => (
             {props.onClickCache &&
                 !props.isCached && (
                     <Button onClick={() => props.onClickCache(props.index)}>
-                        cache!
+                        cache! {props.isLoading && <Spinner />}
                     </Button>
                 )}
             {props.onClickUnCache &&
                 props.isCached && (
                     <Button onClick={() => props.onClickUnCache(props.index)}>
-                        uncache!
+                        uncache! {props.isLoading && <Spinner />}
                     </Button>
                 )}
         </div>

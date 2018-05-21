@@ -1,7 +1,7 @@
 import React from 'react';
 import List from '../components/List';
 import { sendMessageToSw } from '../components/ServiceWorker';
-import { connect } from '../store';
+import { connect, actions } from '../store';
 
 const MyMedia = (props) => (
     <List
@@ -10,10 +10,21 @@ const MyMedia = (props) => (
             props.actions.playById(props.playListItems[index].videoId);
         }}
         onClickCache={(index) => {
-            sendMessageToSw('cache', props.playListItems[index].url);
+            const { url } = props.playListItems[index];
+            sendMessageToSw('cache', url);
+            actions.setPlayListItemPropertiesByUrl({
+                url,
+                property: { isLoading: true },
+            });
         }}
         onClickUnCache={(index) => {
-            sendMessageToSw('uncache', props.playListItems[index].url);
+            const { url } = props.playListItems[index];
+
+            sendMessageToSw('uncache', url);
+            actions.setPlayListItemPropertiesByUrl({
+                url,
+                property: { isLoading: true },
+            });
         }}
         items={props.playListItems}
         getThumbnail={(item) => item.thumbnail}

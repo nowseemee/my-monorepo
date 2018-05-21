@@ -31,12 +31,13 @@ export default (props) => (
                             style={style}
                             title={props.getTitle(item)}
                             thumbnail={props.getThumbnail(item)}
-                            isDisabled={props.getIsDisabled(item)}
-                            isCached={item.isCached}
+                            mainButtonLabel={props.mainButtonLabel}
                             onClick={props.onClick}
                             onClickCache={props.onClickCache}
                             onClickUnCache={props.onClickUnCache}
-                            mainButtonLabel={props.mainButtonLabel}
+                            isDisabled={props.getIsDisabled(item)}
+                            isCached={item.isCached}
+                            isLoading={item.isLoading}
                         />
                     );
                 }}
