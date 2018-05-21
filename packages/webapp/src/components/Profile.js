@@ -1,22 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { css } from 'emotion';
 
 const Profile = ({ profile }) => (
     <img
+        className={css`
+            height: 104px;
+        `}
         src={profile.getImageUrl()}
-        style={{ height: '90px' }}
         alt={profile.getName()}
     />
 );
 
-Profile.propTypes = {
-    profile: PropTypes.shape({
-        getId: PropTypes.func.isRequired,
-        getName: PropTypes.func.isRequired,
-        getGivenName: PropTypes.func.isRequired,
-        getFamilyName: PropTypes.func.isRequired,
-        getImageUrl: PropTypes.func.isRequired,
-        getEmail: PropTypes.func.isRequired,
-    }).isRequired,
-};
 export default Profile;

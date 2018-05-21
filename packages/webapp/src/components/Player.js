@@ -13,7 +13,7 @@ export default connect((store) => {
                 forceAudio: true,
             },
         },
-        height: '28px',
+        height: '32px',
         width: '100%',
         onEnded: () => actions.playNext(),
     };

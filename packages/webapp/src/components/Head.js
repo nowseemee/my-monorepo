@@ -18,10 +18,18 @@ export default connect(getPlaying)((track) => (
         />
         <link rel="manifest" href="manifest.json" />
         <link rel="shortcut icon" href="Icon-192.png" />
-        <link href="Icon-196.png" rel="apple-touch-icon-precomposed" sizes="196x196" />
+        <link
+            href="Icon-196.png"
+            rel="apple-touch-icon-precomposed"
+            sizes="196x196"
+        />
 
-        <title>{`${
-            track.title ? `${track.title} - TheSoundGarden` : `TheSoundGarden`
-        }`}</title>
+        <title>
+            {`${
+                track.title
+                    ? `${track.title} - TheSoundGarden`
+                    : `TheSoundGarden`
+            }`}
+        </title>
     </Helmet>
 ));

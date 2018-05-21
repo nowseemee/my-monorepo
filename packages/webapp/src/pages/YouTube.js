@@ -76,32 +76,30 @@ class YouTube extends React.Component {
 
     render() {
         return (
-            <div>
-                <List
-                    getThumbnail={pathOr('', [
-                        'snippet',
-                        'thumbnails',
-                        'high',
-                        'url',
-                    ])}
-                    getTitle={(item) => item.snippet.title}
-                    items={this.state.youTubeItems}
-                    onClick={(index) =>
-                        fetch(
-                            `/yt?v=${
-                                this.state.youTubeItems[index].snippet
-                                    .resourceId.videoId
-                            }&u=${window.localStorage.getItem('userId')}`
-                        )
-                    }
-                    getId={(item) => item.snippet.resourceId.videoId}
-                    getIsDisabled={(item) =>
-                        find(
-                            propEq('videoId', item.snippet.resourceId.videoId)
-                        )(this.props.playListItems)
-                    }
-                />
-            </div>
+            <List
+                getThumbnail={pathOr('', [
+                    'snippet',
+                    'thumbnails',
+                    'high',
+                    'url',
+                ])}
+                getTitle={(item) => item.snippet.title}
+                items={this.state.youTubeItems}
+                onClick={(index) =>
+                    fetch(
+                        `/yt?v=${
+                            this.state.youTubeItems[index].snippet.resourceId
+                                .videoId
+                        }&u=${window.localStorage.getItem('userId')}`
+                    )
+                }
+                getId={(item) => item.snippet.resourceId.videoId}
+                getIsDisabled={(item) =>
+                    find(propEq('videoId', item.snippet.resourceId.videoId))(
+                        this.props.playListItems
+                    )
+                }
+            />
         );
     }
 }
