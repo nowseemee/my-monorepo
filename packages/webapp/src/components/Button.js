@@ -13,8 +13,14 @@ const styles = {
                 rgba(0, 0, 0, 0.23) 0px 3px 10px;
         }
     `,
-    button: (isSnack) => css`
-        ${isSnack
+    button: (isSnack, disabled) => css`
+        ${disabled
+            ? `
+                pointer-events: none;
+                opacity: .2
+            `
+            : `
+            `} ${isSnack
             ? `
                 background-color: transparent;
                 color: rgb(255, 64, 129);
@@ -82,13 +88,14 @@ const styles = {
     `,
 };
 
-export default ({ isVisible, children, isSnack, onClick }) => (
+export default ({ isVisible, children, isSnack, onClick, disabled }) => (
     <div className={styles.container()}>
         <button
             tabIndex="0"
             type="button"
-            className={styles.button(isSnack)}
+            className={styles.button(isSnack, disabled)}
             onClick={onClick}
+            disabled={disabled}
         >
             <div>
                 <span className={styles.span()} />
