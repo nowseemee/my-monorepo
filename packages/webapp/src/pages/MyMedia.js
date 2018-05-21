@@ -15,9 +15,6 @@ const MyMedia = (props) => (
         onClickUnCache={(index) => {
             sendMessageToSw('uncache', props.playListItems[index].url);
         }}
-        onClickMatch={(index) => {
-            sendMessageToSw('match', props.playListItems[index].url);
-        }}
         items={props.playListItems}
         getThumbnail={(item) => item.thumbnail}
         getTitle={(item) => item.title}

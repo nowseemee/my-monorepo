@@ -31,6 +31,7 @@ Object {
   "playListItems": Array [
     Object {
       "title": "Here we go",
+      "url": "baz",
     },
   ],
   "toast": Object {},

@@ -13,7 +13,10 @@ import {
     always,
     isNil,
     dec,
+    map,
 } from 'ramda';
+
+import { sendMessageToSw } from '../components/ServiceWorker';
 
 export const initialState = {
     playId: '',
@@ -21,10 +24,17 @@ export const initialState = {
     isPlaying: false,
     toast: {},
 };
-export const setPlayListItems = (store, playListItems) => ({
+
+const mergePlayListItems = (store, playListItems) => ({
     ...store,
     playListItems,
 });
+
+export const setPlayListItems = (store, playListItems) =>
+    compose(
+        () => mergePlayListItems(store, playListItems),
+        () => playListItems.forEach(({ url }) => sendMessageToSw('match', url))
+    )();
 
 export const playById = (store, playId) => ({
     ...store,
@@ -59,3 +69,10 @@ const makeStep = (direction) => (store) =>
 
 export const playNext = makeStep(inc);
 export const playPrevious = makeStep(dec);
+
+export const setCachedStateByUrl = (store, { url, isCached }) =>
+    compose(
+        (playListItems) => ({ ...store, playListItems }),
+        map(when(propEq('url', url), merge(__, { isCached }))),
+        getPlayListItems
+    )(store);

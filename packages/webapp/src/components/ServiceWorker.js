@@ -41,10 +41,7 @@ export default class ServiceWorker extends Component {
         actions.setToast({ body: 'UnCached happily', url: data.url });
     };
     handleMatch = (data) => {
-        actions.setToast({
-            body: `${data.hit ? 'In cache' : 'Not cached'}`,
-            url: data.url,
-        });
+        actions.setCachedStateByUrl({ url: data.url, isCached: data.hit });
     };
 
     render() {

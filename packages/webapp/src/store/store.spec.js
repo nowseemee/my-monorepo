@@ -5,6 +5,7 @@ import {
     getPlaying,
     playNext,
     playPrevious,
+    setCachedStateByUrl,
 } from './utils';
 
 describe('store', () => {
@@ -13,7 +14,7 @@ describe('store', () => {
     });
     test('setPlayListItems', () => {
         expect(
-            setPlayListItems(initialState, [{ title: 'Here we go' }])
+            setPlayListItems(initialState, [{ title: 'Here we go', url: 'baz' }])
         ).toMatchSnapshot();
     });
     test('playById', () => {
@@ -110,5 +111,28 @@ describe('store', () => {
             ...madeUpState,
             playId: 'baz',
         });
+    });
+
+    test('setCachedStateByUrl', () => {
+        const url = 'foo';
+        const madeUpInitialState = {
+            ...initialState,
+            playListItems: [{ url: 'foo' }, { url: 'bar' }, { url: 'baz' }],
+            playId: '',
+        };
+
+        const expectedState = {
+            ...initialState,
+            playListItems: [
+                { url: 'foo', isCached: true },
+                { url: 'bar' },
+                { url: 'baz' },
+            ],
+            playId: '',
+        };
+
+        expect(
+            setCachedStateByUrl(madeUpInitialState, { url, isCached: true })
+        ).toEqual(expectedState);
     });
 });

@@ -30,21 +30,18 @@ export default (props) => (
             >
                 {props.mainButtonLabel}
             </Button>
-            {props.onClickCache && (
-                <Button onClick={() => props.onClickCache(props.index)}>
-                    cache!
-                </Button>
-            )}
-            {props.onClickUnCache && (
-                <Button onClick={() => props.onClickUnCache(props.index)}>
-                    uncache!
-                </Button>
-            )}
-            {props.onClickMatch && (
-                <Button onClick={() => props.onClickMatch(props.index)}>
-                    match!
-                </Button>
-            )}
+            {props.onClickCache &&
+                !props.isCached && (
+                    <Button onClick={() => props.onClickCache(props.index)}>
+                        cache!
+                    </Button>
+                )}
+            {props.onClickUnCache &&
+                props.isCached && (
+                    <Button onClick={() => props.onClickUnCache(props.index)}>
+                        uncache!
+                    </Button>
+                )}
         </div>
     </div>
 );

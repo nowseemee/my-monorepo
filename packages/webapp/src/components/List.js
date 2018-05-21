@@ -32,10 +32,10 @@ export default (props) => (
                             title={props.getTitle(item)}
                             thumbnail={props.getThumbnail(item)}
                             isDisabled={props.getIsDisabled(item)}
+                            isCached={item.isCached}
                             onClick={props.onClick}
                             onClickCache={props.onClickCache}
                             onClickUnCache={props.onClickUnCache}
-                            onClickMatch={props.onClickMatch}
                             mainButtonLabel={props.mainButtonLabel}
                         />
                     );

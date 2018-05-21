@@ -8,7 +8,9 @@ import {
     playById,
     playNext,
     playPrevious,
+    setCachedStateByUrl,
 } from './utils';
+
 import config from '../config';
 
 firebase.initializeApp(config);
@@ -26,6 +28,7 @@ const store = {
         playNext,
         playPrevious,
         setToast: (store, toast = {}) => ({ ...store, toast }),
+        setCachedStateByUrl,
     },
 };
 
