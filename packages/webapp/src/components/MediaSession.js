@@ -1,4 +1,3 @@
-import FilePlayer from 'react-player/lib/players/FilePlayer';
 import { connect, actions } from '../store';
 import { getPlaying } from '../store/utils';
 
@@ -46,4 +45,4 @@ export default connect((store) => {
         // navigator.mediaSession.setActionHandler('nexttrack', actions.playNext);
     }
     return null;
-})(FilePlayer);
+})(() => null);
