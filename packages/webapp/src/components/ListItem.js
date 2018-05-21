@@ -14,7 +14,7 @@ export default (props) => (
         <TrackInfo
             title={props.title}
             thumbnail={props.thumbnail}
-            height={120}
+            height={180}
         />
         <div
             className={css`
@@ -24,11 +24,26 @@ export default (props) => (
                 width: 100%;
             `}
         >
-            <Button onClick={props.onClick} disabled={props.isDisabled}>
-                play
+            <Button
+                onClick={() => props.onClick(props.index)}
+                disabled={props.isDisabled}
+            >
+                {props.mainButtonLabel}
             </Button>
             {props.onClickCache && (
-                <Button onClick={props.onClickCache}>cache!</Button>
+                <Button onClick={() => props.onClickCache(props.index)}>
+                    cache!
+                </Button>
+            )}
+            {props.onClickUnCache && (
+                <Button onClick={() => props.onClickUnCache(props.index)}>
+                    uncache!
+                </Button>
+            )}
+            {props.onClickMatch && (
+                <Button onClick={() => props.onClickMatch(props.index)}>
+                    match!
+                </Button>
             )}
         </div>
     </div>

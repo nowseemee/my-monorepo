@@ -1,7 +1,6 @@
 import React from 'react';
-import { css } from 'emotion';
 
-const Home = (props) => (
+const Home = () => (
     <h1>Hi!</h1>
 );
 

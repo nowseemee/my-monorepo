@@ -1,10 +1,7 @@
 import React from 'react';
-import { css } from 'emotion';
 import List from 'react-virtualized/dist/commonjs/List';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 import ListItem from './ListItem';
-import TrackInfo from './TrackInfo';
-import Button from './Button';
 
 export default (props) => (
     <AutoSizer>
@@ -15,7 +12,7 @@ export default (props) => (
                 onScroll={onChildScroll}
                 scrollTop={scrollTop}
                 width={width}
-                rowHeight={120}
+                rowHeight={180}
                 rowCount={props.items.length}
                 rowRenderer={({
                     index, // Index of row
@@ -30,12 +27,16 @@ export default (props) => (
                     return (
                         <ListItem
                             key={props.getId(item)}
+                            index={index}
                             style={style}
                             title={props.getTitle(item)}
                             thumbnail={props.getThumbnail(item)}
-                            onClick={() => props.onClick(index)}
                             isDisabled={props.getIsDisabled(item)}
-                            onClickCache={() => props.onClickCache(index)}
+                            onClick={props.onClick}
+                            onClickCache={props.onClickCache}
+                            onClickUnCache={props.onClickUnCache}
+                            onClickMatch={props.onClickMatch}
+                            mainButtonLabel={props.mainButtonLabel}
                         />
                     );
                 }}

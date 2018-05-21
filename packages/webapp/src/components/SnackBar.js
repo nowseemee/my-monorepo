@@ -2,7 +2,7 @@ import React from 'react';
 import { css } from 'emotion';
 
 import Button from '../components/Button';
-import { connect } from '../store';
+import { connect, actions } from '../store';
 
 const styles = {
     container: (isVisible) => css`
@@ -49,12 +49,33 @@ const SnackBar = (props) => (
                         {props.actionLabel}
                     </Button>
                 )}
+                <button onClick={() => actions.setToast()}>X</button>
             </div>
         </div>
     </div>
 );
 
+class S extends React.Component {
+    state = {
+        isVisible: false,
+    };
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.isVisible && nextProps.isVisible) {
+            this.setState({ isVisible: false });
+            setTimeout(() => this.setState({ isVisible: true }), 100);
+            return;
+        }
+
+        return this.setState({ isVisible: nextProps.isVisible });
+    }
+
+    render() {
+        return <SnackBar {...this.props} isVisible={this.state.isVisible} />;
+    }
+}
+
 export default connect(({ toast }) => ({
     ...toast,
     isVisible: !!toast.body,
-}))(SnackBar);
+}))(S);

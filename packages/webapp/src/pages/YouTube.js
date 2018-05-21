@@ -77,6 +77,7 @@ class YouTube extends React.Component {
     render() {
         return (
             <List
+                mainButtonLabel="obtain"
                 getThumbnail={pathOr('', [
                     'snippet',
                     'thumbnails',

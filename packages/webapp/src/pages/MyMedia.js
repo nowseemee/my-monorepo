@@ -1,20 +1,22 @@
 import React from 'react';
 import List from '../components/List';
+import { sendMessageToSw } from '../components/ServiceWorker';
 import { connect } from '../store';
-
-function send_message_to_sw(url) {
-    'serviceWorker' in navigator &&
-        navigator.serviceWorker.controller !== null &&
-        navigator.serviceWorker.controller.postMessage(url);
-}
 
 const MyMedia = (props) => (
     <List
+        mainButtonLabel="play"
         onClick={(index) => {
             props.actions.playById(props.playListItems[index].videoId);
         }}
         onClickCache={(index) => {
-            send_message_to_sw(props.playListItems[index].url);
+            sendMessageToSw('cache', props.playListItems[index].url);
+        }}
+        onClickUnCache={(index) => {
+            sendMessageToSw('uncache', props.playListItems[index].url);
+        }}
+        onClickMatch={(index) => {
+            sendMessageToSw('match', props.playListItems[index].url);
         }}
         items={props.playListItems}
         getThumbnail={(item) => item.thumbnail}

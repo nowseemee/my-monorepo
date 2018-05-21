@@ -1,6 +1,12 @@
 import { Component } from 'react';
 import { actions, initFirestore } from '../store';
 
+export const sendMessageToSw = (type, url) => {
+    'serviceWorker' in navigator &&
+        navigator.serviceWorker.controller !== null &&
+        navigator.serviceWorker.controller.postMessage({ type, url });
+};
+
 export default class ServiceWorker extends Component {
     componentDidMount() {
         'serviceWorker' in navigator &&
@@ -15,6 +21,9 @@ export default class ServiceWorker extends Component {
 
     handleMessage = (event) => {
         event.data.type === 'install' && this.handleInstall(event.data);
+        event.data.type === 'cache' && this.handleCache(event.data);
+        event.data.type === 'uncache' && this.handleUnCache(event.data);
+        event.data.type === 'match' && this.handleMatch(event.data);
     };
 
     handleInstall = (data) => {
@@ -22,6 +31,19 @@ export default class ServiceWorker extends Component {
             ...data,
             action: () => window.location.reload(),
             actionLabel: 'Reload!',
+        });
+    };
+
+    handleCache = (data) => {
+        actions.setToast({ body: 'Cached happily', url: data.url });
+    };
+    handleUnCache = (data) => {
+        actions.setToast({ body: 'UnCached happily', url: data.url });
+    };
+    handleMatch = (data) => {
+        actions.setToast({
+            body: `${data.hit ? 'In cache' : 'Not cached'}`,
+            url: data.url,
         });
     };
 
