@@ -49,7 +49,7 @@ const SnackBar = (props) => (
                         {props.actionLabel}
                     </Button>
                 )}
-                <button onClick={() => actions.setToast()}>X</button>
+                {props.body && <Button onClick={() => actions.setToast()} isSnack>X</Button>}
             </div>
         </div>
     </div>

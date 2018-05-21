@@ -47,8 +47,9 @@ class App extends Component {
                 <ServiceWorker />
                 <MediaSession />
                 <Head />
-                <style
-                >{`html,body,#root { height: 100%; margin: 0; font-family: Roboto, sans-serif; }`}</style>
+                <style>
+                    {`html,body,#root { height: 100%; margin: 0; font-family: Roboto, sans-serif; overflow: hidden }`}
+                </style>
 
                 <div className={styles.app}>
                     <header className={styles.header}>

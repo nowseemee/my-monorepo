@@ -7,7 +7,7 @@ const styles = {
         box-sizing: border-box;
         font-family: Roboto, sans-serif;
         display: inline-block;
-        min-width: 88px;
+        min-width: 33px;
         &:active {
             box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px,
                 rgba(0, 0, 0, 0.23) 0px 3px 10px;
