@@ -1,6 +1,4 @@
 const renderToHtml = require('./server/renderToHtml');
 const fs = require('fs');
 
-renderToHtml('/youtube').then((html) =>
-    fs.writeFile('./build/index.html', html)
-);
+renderToHtml('/').then((html) => fs.writeFile('./build/index.html', html));
