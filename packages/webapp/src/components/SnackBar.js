@@ -57,7 +57,7 @@ const SnackBar = (props) => (
 
 class S extends React.Component {
     state = {
-        isVisible: false,
+        isVisible: this.props.isVisible,
     };
 
     componentWillReceiveProps(nextProps) {
