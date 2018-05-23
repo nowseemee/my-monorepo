@@ -1,6 +1,3 @@
-const os = require('os');
-const path = require('path');
-const fs = require('fs');
 const Firestore = require('@google-cloud/firestore');
 const Storage = require('@google-cloud/storage');
 const ytdl = require('ytdl-core');
@@ -13,21 +10,12 @@ const firestore = new Firestore({
     projectId: config.projectId,
 });
 
-const handleUpload = (request, response, uploadData, info) => {
-    bucket
-        .upload(uploadData.file)
-        .then(() =>
-            storage
-                .bucket(bucket.name)
-                .file(uploadData.fileName)
-                .makePublic()
-        )
+const handleUpload = (response, uploadData) => {
+    storage
+        .bucket(bucket.name)
+        .file(uploadData.fileName)
+        .makePublic()
         .then(() => {
-            const data = Object.assign({}, uploadData, {
-                title: info.title,
-                thumbnail: info.thumbnail_url,
-            });
-
             firestore
                 .doc(
                     'users/' +
@@ -35,9 +23,9 @@ const handleUpload = (request, response, uploadData, info) => {
                         '/videos/' +
                         uploadData.videoId
                 )
-                .set(data);
+                .set(uploadData);
 
-            return data;
+            return uploadData;
         })
         .then((data) => response.status(200).json(data))
         .catch((error) => {
@@ -50,26 +38,29 @@ module.exports = (request, response) => {
     const videoId = request.query.v;
     const fileName = videoId + '.mp4';
     const userId = request.query.u;
-    const filepath = path.join(os.tmpdir(), fileName);
     const uploadData = {
         fileName,
         userId,
         videoId,
-        file: filepath,
         bucketName: bucket.name,
         timestamp: new Date().getTime(),
         url: 'https://storage.googleapis.com/' + bucket.name + '/' + fileName,
     };
     const video = ytdl('http://www.youtube.com/watch?v=' + request.query.v);
+    const stream = video.pipe(bucket.file(fileName).createWriteStream());
 
-    video.pipe(fs.createWriteStream(filepath));
-
-    let info;
-    video.on('info', (i) => {
-        info = i;
+    video.on('response', (response) => {
+        uploadData.fileSize = +response.headers['content-length'];
     });
-    video.on('progress', (chunkLength, downloaded, total) => {
-        downloaded === total &&
-            handleUpload(request, response, uploadData, info);
+
+    video.on('info', (i) => {
+        Object.assign(uploadData, {
+            thumbnail: i.thumbnail_url,
+            title: i.title,
+        });
+    });
+    stream.on('error', () => console.log('error'));
+    stream.on('finish', () => {
+        handleUpload(response, uploadData);
     });
 };
