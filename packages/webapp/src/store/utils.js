@@ -33,7 +33,10 @@ const mergePlayListItems = (store, playListItems) => ({
 export const setPlayListItems = (store, playListItems) =>
     compose(
         () => mergePlayListItems(store, playListItems),
-        () => playListItems.forEach(({ url }) => sendMessageToSw('match', url))
+        () =>
+            playListItems.forEach(({ url }) =>
+                sendMessageToSw('match', { url })
+            )
     )();
 
 export const playById = (store, playId) => ({

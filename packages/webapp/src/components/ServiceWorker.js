@@ -1,10 +1,10 @@
 import { Component } from 'react';
 import { actions, initFirestore } from '../store';
 
-export const sendMessageToSw = (type, url) => {
+export const sendMessageToSw = (type, payload) => {
     'serviceWorker' in navigator &&
         navigator.serviceWorker.controller !== null &&
-        navigator.serviceWorker.controller.postMessage({ type, url });
+        navigator.serviceWorker.controller.postMessage({ type, ...payload });
 };
 
 export default class ServiceWorker extends Component {
@@ -21,8 +21,8 @@ export default class ServiceWorker extends Component {
 
     handleMessage = (event) => {
         event.data.type === 'install' && this.handleInstall(event.data);
-        event.data.type === 'cache' && this.handleCache(event.data);
-        event.data.type === 'uncache' && this.handleUnCache(event.data);
+        event.data.type === 'cacheAll' && this.handleCache(event.data);
+        event.data.type === 'uncacheAll' && this.handleUnCache(event.data);
         event.data.type === 'match' && this.handleMatch(event.data);
     };
 
@@ -35,16 +35,23 @@ export default class ServiceWorker extends Component {
     };
 
     handleCache = (data) => {
-        actions.setToast({ body: 'Cached happily', url: data.url });
+        actions.setToast({ body: 'Cached happily', urls: data.urls });
+        const url = data.urls.filter((x) =>
+            x.includes('storage.googleapis.com')
+        );
+
         actions.setPlayListItemPropertiesByUrl({
-            url: data.url,
+            url,
             property: { isCached: true, isLoading: false },
         });
     };
     handleUnCache = (data) => {
         actions.setToast({ body: 'UnCached happily', url: data.url });
+        const url = data.urls.filter((x) =>
+            x.includes('storage.googleapis.com')
+        );
         actions.setPlayListItemPropertiesByUrl({
-            url: data.url,
+            url,
             property: { isCached: false, isLoading: false },
         });
     };

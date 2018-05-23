@@ -10,17 +10,17 @@ const MyMedia = (props) => (
             props.actions.playById(props.playListItems[index].videoId);
         }}
         onClickCache={(index) => {
-            const { url } = props.playListItems[index];
-            sendMessageToSw('cache', url);
+            const { url, thumbnail } = props.playListItems[index];
+            sendMessageToSw('cacheAll', {urls : [url, thumbnail]});
             actions.setPlayListItemPropertiesByUrl({
                 url,
                 property: { isLoading: true },
             });
         }}
         onClickUnCache={(index) => {
-            const { url } = props.playListItems[index];
+            const { url, thumbnail } = props.playListItems[index];
 
-            sendMessageToSw('uncache', url);
+            sendMessageToSw('uncacheAll', {urls: [url, thumbnail]});
             actions.setPlayListItemPropertiesByUrl({
                 url,
                 property: { isLoading: true },

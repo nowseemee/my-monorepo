@@ -1,5 +1,3 @@
-self.importScripts('sw-toolbox.js');
-
 const sendMessage = (message) =>
     clients
         .matchAll({
@@ -16,59 +14,47 @@ self.addEventListener('install', function() {
     });
 });
 
+const openStorage = () => caches.open('storage');
+const matchUrl = (url) => openStorage().then((cache) => cache.match(url));
+const putToStorage = (url) => (response) =>
+    openStorage().then((storage) => storage.put(url, response));
+const fetchUrl = (url) => fetch(url, { mode: 'no-cors' });
+
 self.addEventListener('message', function(event) {
     event.data.type === 'match' &&
+        matchUrl(event.data.url).then((match) =>
+            sendMessage({
+                type: 'match',
+                hit: !!match,
+                url: event.data.url,
+            })
+        );
+
+    event.data.type === 'cacheAll' &&
+        Promise.all(
+            event.data.urls.map((url) => fetchUrl(url).then(putToStorage(url)))
+        ).then(() =>
+            sendMessage({
+                ...event.data,
+                type: 'cacheAll',
+            })
+        );
+
+    event.data.type === 'uncacheAll' &&
+        openStorage()
+            .then((cache) => event.data.urls.map((url) => cache.delete(url)))
+            .then(() =>
+                sendMessage({
+                    ...event.data,
+                    type: 'uncacheAll',
+                })
+            );
+});
+
+self.addEventListener('fetch', (event) => {
+    event.respondWith(
         caches
-            .open('storage')
-            .then((cache) => cache.match(event.data.url))
-            .then((match) =>
-                sendMessage({
-                    type: 'match',
-                    hit: !!match,
-                    url: event.data.url,
-                })
-            );
-
-    event.data.type === 'cache' &&
-        toolbox
-            .cache(event.data.url, {
-                cache: {
-                    name: 'storage',
-                },
-            })
-            .then(() =>
-                sendMessage({
-                    type: 'cache',
-                    url: event.data.url,
-                })
-            );
-    event.data.type === 'uncache' &&
-        toolbox
-            .uncache(event.data.url, {
-                cache: {
-                    name: 'storage',
-                },
-            })
-            .then(() =>
-                sendMessage({
-                    type: 'uncache',
-                    url: event.data.url,
-                })
-            );
+            .match(event.request)
+            .then((response) => response || fetch(event.request))
+    );
 });
-
-toolbox.router.get('/(.*)', toolbox.cacheFirst, {
-    // Use a dedicated cache for the responses, separate from the default cache.
-    cache: {
-        name: 'storage-core',
-        maxEntries: 1,
-    },
-
-    origin: /storage\.googleapis\.com$/,
-});
-
-// self.addEventListener('fetch', function(event) {
-//     self.isOnline !== navigator.onLine &&
-//         console.log('navigator.onLine', navigator.onLine);
-//     self.isOnline = navigator.onLine;
-// });
