@@ -22,7 +22,7 @@
     "build:client": "my-react-scripts build-client",
     "build:server": "my-react-scripts build-server",
     "cp:asset-manifest": "cp build/asset-manifest.json server/",
-    "build": "yarn build:client && yarn build:server  && yarn cp:asset-manifest && node ./createIndex && node ./mergeSw",
+    "build": "yarn build:client && yarn build:server  && yarn cp:asset-manifest && node ./scripts/createIndex && node ./scripts/mergeSw",
     "deploy:functions": "firebase deploy --only functions",
     "deploy:hosting": "firebase deploy --only hosting",
     "deploy": "firebase deploy --only hosting,functions",
