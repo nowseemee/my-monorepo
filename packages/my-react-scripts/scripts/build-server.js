@@ -24,21 +24,20 @@ webpack(
                         loader: 'babel-loader',
                         options: {
                             presets: [
-                                'react',
+                                '@babel/react',
                                 [
-                                    'env',
+                                    '@babel/preset-env',
                                     {
                                         targets: {
-                                            node: '6.13.1',
+                                            node: '6.11.5',
                                         },
-                                        modules: 'commonjs',
+                                        modules: 'commonjs'
                                     },
                                 ],
                             ],
                             plugins: [
-                                'babel-plugin-transform-object-rest-spread',
                                 'dynamic-import-node',
-                                'babel-plugin-transform-class-properties',
+                                '@babel/plugin-proposal-class-properties',
                             ],
                         },
                     },

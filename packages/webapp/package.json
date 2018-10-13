@@ -6,8 +6,8 @@
     "emotion": "^9.1.3",
     "prop-types": "^15.6.1",
     "ramda": "^0.25.0",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
     "react-helmet-async": "^0.1.0",
     "react-player": "^1.5.0",
     "react-router": "^4.2.0",
@@ -35,5 +35,11 @@
     "my-react-scripts": "file:../my-react-scripts",
     "sw-precache": "^5.2.1",
     "sw-toolbox": "^3.6.0"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
