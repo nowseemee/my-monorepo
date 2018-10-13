@@ -18,6 +18,7 @@ asset-manifest.json
 .env.test.local
 .env.production.local
 .firebaserc
+.firebase
 .idea/
 
 npm-debug.log*
